@@ -1,0 +1,2053 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/auth/magic-link": {
+      "post": {
+        "operationId": "AuthController_requestMagicLink_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MagicLinkSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Request a single-use 10-minute email magic link",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/magic-link/verify": {
+      "post": {
+        "operationId": "AuthController_verifyMagicLink_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Verify a magic link token and issue JWT + refresh cookie",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/oauth/{provider}/exchange": {
+      "post": {
+        "operationId": "AuthController_exchangeOAuth_v1",
+        "parameters": [
+          {
+            "name": "provider",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OAuthExchangeSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Exchange PKCE authorization code from Google or Apple",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Rotate refresh cookie and issue a fresh short-lived JWT",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout_v1",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Revoke active refresh token family and clear cookie",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "operationId": "UsersController_getMe_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get authenticated user profile, entitlement tier, and stats",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/me/onboarding": {
+      "patch": {
+        "operationId": "UsersController_completeOnboarding_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Complete initial username and optional age verification",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/me/preferences": {
+      "patch": {
+        "operationId": "UsersController_updatePreferences_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPreferencesSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update display name, UI locale, translation language, or birth date",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/users/me/audio-consent": {
+      "post": {
+        "operationId": "UsersController_recordAudioConsent_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Record explicit user consent for cloud audio recording & processing",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/v1/media/presign-upload": {
+      "post": {
+        "operationId": "MediaController_presignUpload_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresignUploadSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Issue a short-lived S3 pre-signed PUT upload URL",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/v1/media/{assetId}/confirm": {
+      "post": {
+        "operationId": "MediaController_confirmUpload_v1",
+        "parameters": [
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Verify uploaded S3 object via HeadObject and mark asset ready",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/v1/media/{assetId}/stream-url": {
+      "get": {
+        "operationId": "MediaController_getStreamUrl_v1",
+        "parameters": [
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get short-lived signed playback URL for authorized media",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/v1/media/{assetId}": {
+      "delete": {
+        "operationId": "MediaController_deleteAsset_v1",
+        "parameters": [
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete uploaded user recording from private S3 storage and scrub metadata links",
+        "tags": [
+          "Media"
+        ]
+      }
+    },
+    "/api/v1/audio/transcribe-fallback": {
+      "post": {
+        "operationId": "AiController_transcribeFallback_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscribeFallbackSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Run quota-guarded cloud STT fallback on an uploaded user audio asset",
+        "tags": [
+          "AI Speech, IELTS/TOEIC Coaching & Vocabulary"
+        ]
+      }
+    },
+    "/api/v1/ai/speech-assessments": {
+      "post": {
+        "operationId": "AiController_submitSpeechAssessment_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitSpeechAssessmentSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Queue asynchronous pronunciation alignment, stress/prosody check, or IELTS/TOEIC coaching",
+        "tags": [
+          "AI Speech, IELTS/TOEIC Coaching & Vocabulary"
+        ]
+      }
+    },
+    "/api/v1/ai/speech-assessments/{id}": {
+      "get": {
+        "operationId": "AiController_getSpeechAssessment_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fetch speech assessment result distinguishing acoustic metrics from LLM coaching",
+        "tags": [
+          "AI Speech, IELTS/TOEIC Coaching & Vocabulary"
+        ]
+      }
+    },
+    "/api/v1/ai/vocabulary/explain": {
+      "post": {
+        "operationId": "AiController_explainVocabulary_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VocabExplainSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Generate structured vocabulary nuances, collocations, and CEFR examples",
+        "tags": [
+          "AI Speech, IELTS/TOEIC Coaching & Vocabulary"
+        ]
+      }
+    },
+    "/api/v1/ai/toeic/explain": {
+      "post": {
+        "operationId": "AiController_explainToeicQuestion_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ToeicExplainSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Generate structured TOEIC listening distractor analysis and vocabulary highlights",
+        "tags": [
+          "AI Speech, IELTS/TOEIC Coaching & Vocabulary"
+        ]
+      }
+    },
+    "/api/v1/lessons": {
+      "get": {
+        "operationId": "LessonsController_listLessons_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List filtered lessons with pagination",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/lessons/daily": {
+      "get": {
+        "operationId": "LessonsController_getDailyLessons_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get today's featured lessons",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/lessons/{slug}": {
+      "get": {
+        "operationId": "LessonsController_getLessonDetail_v1",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get lesson details with signed media and transcript cues (redacted if Pro-locked)",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/lessons/{lessonId}/attempts": {
+      "post": {
+        "operationId": "LessonsController_submitAttempt_v1",
+        "parameters": [
+          {
+            "name": "lessonId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SentenceAttemptSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Submit a sentence attempt for Dictation or Shadowing and credit idempotent XP/Diamonds",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/lessons/import-youtube": {
+      "post": {
+        "operationId": "LessonsController_importYoutube_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImportYoutubeSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Queue asynchronous YouTube lesson ingestion & AI transcription (PRO required)",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/grammar": {
+      "get": {
+        "operationId": "LessonsController_listGrammar_v1",
+        "parameters": [
+          {
+            "name": "level",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List public grammar syllabus filtered optionally by CEFR level",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/stories": {
+      "get": {
+        "operationId": "LessonsController_listStories_v1",
+        "parameters": [
+          {
+            "name": "level",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "collection",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List graded interactive stories",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/stories/{slug}": {
+      "get": {
+        "operationId": "LessonsController_getStoryDetail_v1",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get interactive story scenes and signed audio URL",
+        "tags": [
+          "Lessons, Dictation, Shadowing, Grammar & Stories"
+        ]
+      }
+    },
+    "/api/v1/vocabulary/decks": {
+      "get": {
+        "operationId": "VocabularyController_listDecks_v1",
+        "parameters": [
+          {
+            "name": "visibility",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List public or personal vocabulary decks with search & pagination",
+        "tags": [
+          "Vocabulary & Dictionary"
+        ]
+      },
+      "post": {
+        "operationId": "VocabularyController_createDeck_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVocabDeckSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a personal vocabulary deck with initial cards",
+        "tags": [
+          "Vocabulary & Dictionary"
+        ]
+      }
+    },
+    "/api/v1/vocabulary/decks/{slug}": {
+      "get": {
+        "operationId": "VocabularyController_getDeckDetail_v1",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Inspect vocabulary deck cards (24-card preview if Pro-locked)",
+        "tags": [
+          "Vocabulary & Dictionary"
+        ]
+      }
+    },
+    "/api/v1/dictionary/search": {
+      "get": {
+        "operationId": "VocabularyController_searchDictionary_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Search cached dictionary entries",
+        "tags": [
+          "Vocabulary & Dictionary"
+        ]
+      }
+    },
+    "/api/v1/dictionary/words/{word}": {
+      "get": {
+        "operationId": "VocabularyController_getWord_v1",
+        "parameters": [
+          {
+            "name": "word",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get dictionary entry with phonetics and meanings",
+        "tags": [
+          "Vocabulary & Dictionary"
+        ]
+      }
+    },
+    "/api/v1/srs/due": {
+      "get": {
+        "operationId": "SrsController_getDueCards_v1",
+        "parameters": [
+          {
+            "name": "limit",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deckSlug",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fetch due vocabulary flashcards ordered by nextReviewAt",
+        "tags": [
+          "Spaced Repetition (SM-2)"
+        ]
+      }
+    },
+    "/api/v1/srs/reviews": {
+      "post": {
+        "operationId": "SrsController_submitReview_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SrsReviewSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Submit flashcard rating (1..4) and schedule next SM-2 interval",
+        "tags": [
+          "Spaced Repetition (SM-2)"
+        ]
+      }
+    },
+    "/api/v1/exams/history": {
+      "get": {
+        "operationId": "ProgressController_getExamHistory_v1",
+        "parameters": [
+          {
+            "name": "track",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Get paginated exam attempt history for current user",
+        "tags": [
+          "Progress, Analytics, Streaks & Leaderboard"
+        ]
+      }
+    },
+    "/api/v1/exams/analytics": {
+      "get": {
+        "operationId": "ProgressController_getExamAnalytics_v1",
+        "parameters": [
+          {
+            "name": "track",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Compute IELTS/TOEIC score progression and top weak skill tags",
+        "tags": [
+          "Progress, Analytics, Streaks & Leaderboard"
+        ]
+      }
+    },
+    "/api/v1/streak/checkin": {
+      "post": {
+        "operationId": "ProgressController_dailyCheckin_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Perform idempotent daily streak check-in and earn diamonds",
+        "tags": [
+          "Progress, Analytics, Streaks & Leaderboard"
+        ]
+      }
+    },
+    "/api/v1/leaderboard/monthly": {
+      "get": {
+        "operationId": "ProgressController_getMonthlyLeaderboard_v1",
+        "parameters": [
+          {
+            "name": "month",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get cached monthly XP leaderboard",
+        "tags": [
+          "Progress, Analytics, Streaks & Leaderboard"
+        ]
+      }
+    },
+    "/api/v1/exams/sets": {
+      "get": {
+        "operationId": "ExamsController_listSets_v1",
+        "parameters": [
+          {
+            "name": "track",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List exam sets by track (IELTS or TOEIC)",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sets/{setSlug}": {
+      "get": {
+        "operationId": "ExamsController_getSetDetail_v1",
+        "parameters": [
+          {
+            "name": "setSlug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get exams inside an exam set (free-first order)",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/start": {
+      "post": {
+        "operationId": "ExamsController_startSession_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StartExamSessionSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Start a timed TEST or interactive PRACTICE exam session",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/{id}/questions": {
+      "get": {
+        "operationId": "ExamsController_getSessionQuestions_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "part",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Fetch questions and listening URLs for an active session",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/{id}/answers": {
+      "put": {
+        "operationId": "ExamsController_saveAnswers_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaveExamAnswersSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Batch upsert exam answers while IN_PROGRESS before deadline",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/{id}/check/{qn}": {
+      "get": {
+        "operationId": "ExamsController_checkPracticeQuestion_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "qn",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Verify a single question inline (PRACTICE mode only)",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/{id}/submit": {
+      "post": {
+        "operationId": "ExamsController_submitSession_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Finalize and deterministically score an exam session",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/{id}/abandon": {
+      "post": {
+        "operationId": "ExamsController_abandonSession_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Abandon an in-progress exam session",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/sessions/{id}/result": {
+      "get": {
+        "operationId": "ExamsController_getSessionResult_v1",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "View scored exam result with full answer explanations",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/exams/{slug}": {
+      "get": {
+        "operationId": "ExamsController_getExamOverview_v1",
+        "parameters": [
+          {
+            "name": "slug",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "Get exam overview and parts metadata (never exposes audio URLs)",
+        "tags": [
+          "IELTS & TOEIC Exams"
+        ]
+      }
+    },
+    "/api/v1/comments": {
+      "get": {
+        "operationId": "CommunityController_listComments_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List public paginated comments for lesson, story, or exam",
+        "tags": [
+          "Community, Comments & Voice Speaking Rooms"
+        ]
+      },
+      "post": {
+        "operationId": "CommunityController_createComment_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCommentSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Post a moderated comment",
+        "tags": [
+          "Community, Comments & Voice Speaking Rooms"
+        ]
+      }
+    },
+    "/api/v1/speaking/rooms": {
+      "get": {
+        "operationId": "CommunityController_listSpeakingRooms_v1",
+        "parameters": [
+          {
+            "name": "cefrLevel",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "topic",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List active community speaking rooms",
+        "tags": [
+          "Community, Comments & Voice Speaking Rooms"
+        ]
+      },
+      "post": {
+        "operationId": "CommunityController_createSpeakingRoom_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSpeakingRoomSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a community speaking voice room (requires age verification)",
+        "tags": [
+          "Community, Comments & Voice Speaking Rooms"
+        ]
+      }
+    },
+    "/api/v1/billing/plans": {
+      "get": {
+        "operationId": "SubscriptionsController_listPlans_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List active PRO / LIFETIME subscription plans",
+        "tags": [
+          "Subscriptions, Billing & Shop"
+        ]
+      }
+    },
+    "/api/v1/billing/checkout": {
+      "post": {
+        "operationId": "SubscriptionsController_createCheckout_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create pending checkout transaction for card or VietQR",
+        "tags": [
+          "Subscriptions, Billing & Shop"
+        ]
+      }
+    },
+    "/api/v1/webhooks/{provider}": {
+      "post": {
+        "operationId": "SubscriptionsController_handleWebhook_v1",
+        "parameters": [
+          {
+            "name": "provider",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "HMAC-signed payment gateway webhook to grant entitlements",
+        "tags": [
+          "Subscriptions, Billing & Shop"
+        ]
+      }
+    },
+    "/api/v1/shop/items": {
+      "get": {
+        "operationId": "SubscriptionsController_listShopItems_v1",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "summary": "List diamond shop items and streak freezes",
+        "tags": [
+          "Subscriptions, Billing & Shop"
+        ]
+      }
+    },
+    "/api/v1/shop/purchase": {
+      "post": {
+        "operationId": "SubscriptionsController_purchaseShopItem_v1",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShopPurchaseSwaggerDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Atomically debit diamonds and grant shop item / streak freeze",
+        "tags": [
+          "Subscriptions, Billing & Shop"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "LinguaCraft Independent API",
+    "description": "Modular NestJS API for Dictation, Shadowing, Vocabulary/SM-2, IELTS & TOEIC Exams, Community Speaking, and Billing.",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "MagicLinkSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "learner@linguacraft.app"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "OAuthExchangeSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "codeVerifier": {
+            "type": "string"
+          },
+          "redirectUri": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "codeVerifier",
+          "redirectUri"
+        ]
+      },
+      "OnboardingSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "alex_english"
+          },
+          "birthDate": {
+            "type": "string",
+            "example": "1998-05-12"
+          },
+          "preferredTranslateLang": {
+            "type": "string",
+            "example": "vi"
+          }
+        }
+      },
+      "UserPreferencesSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "example": "Alex Rivera"
+          },
+          "preferredUiLocale": {
+            "type": "string",
+            "enum": [
+              "en",
+              "vi"
+            ]
+          },
+          "preferredTranslateLang": {
+            "type": "string",
+            "example": "vi"
+          },
+          "birthDate": {
+            "type": "string",
+            "example": "1998-05-12"
+          }
+        }
+      },
+      "PresignUploadSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "purpose": {
+            "type": "string",
+            "enum": [
+              "SHADOWING_RECORDING",
+              "SPEAKING_CLIP"
+            ]
+          },
+          "mimeType": {
+            "type": "string",
+            "example": "audio/webm;codecs=opus"
+          },
+          "contentLength": {
+            "type": "number",
+            "example": 48200
+          }
+        },
+        "required": [
+          "purpose",
+          "mimeType",
+          "contentLength"
+        ]
+      },
+      "TranscribeFallbackSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "language": {
+            "type": "string",
+            "default": "en"
+          }
+        },
+        "required": [
+          "assetId",
+          "language"
+        ]
+      },
+      "SubmitSpeechAssessmentSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "SHADOWING",
+              "IELTS_SPEAKING",
+              "TOEIC_SPEAKING"
+            ]
+          },
+          "language": {
+            "type": "string",
+            "default": "en"
+          },
+          "referenceText": {
+            "type": "string"
+          },
+          "ieltsPart": {
+            "type": "number",
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "promptQuestion": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetId",
+          "mode"
+        ]
+      },
+      "VocabExplainSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "word": {
+            "type": "string",
+            "example": "resilient"
+          },
+          "cefrLevel": {
+            "type": "string",
+            "enum": [
+              "A1",
+              "A2",
+              "B1",
+              "B2",
+              "C1",
+              "C2"
+            ]
+          },
+          "contextSentence": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "word"
+        ]
+      },
+      "ToeicExplainSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "transcript": {
+            "type": "string"
+          },
+          "questionPrompt": {
+            "type": "string"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "correctAnswer": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "transcript",
+          "questionPrompt",
+          "options",
+          "correctAnswer"
+        ]
+      },
+      "SentenceAttemptSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "sentenceId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "DICTATION",
+              "SHADOWING"
+            ]
+          },
+          "accuracyScore": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "mistakesCount": {
+            "type": "number",
+            "default": 0
+          },
+          "replayCount": {
+            "type": "number",
+            "default": 0
+          }
+        },
+        "required": [
+          "sentenceId",
+          "mode",
+          "accuracyScore"
+        ]
+      },
+      "ImportYoutubeSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "youtubeUrl": {
+            "type": "string",
+            "example": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+          },
+          "topicIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "youtubeUrl"
+        ]
+      },
+      "CreateVocabDeckSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Academic Essay Verbs"
+          },
+          "description": {
+            "type": "string"
+          },
+          "cefrLevel": {
+            "type": "string",
+            "enum": [
+              "A1",
+              "A2",
+              "B1",
+              "B2",
+              "C1",
+              "C2"
+            ]
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "PUBLIC",
+              "PRIVATE"
+            ],
+            "default": "PRIVATE"
+          },
+          "cards": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "term": {
+                  "type": "string"
+                },
+                "meaning": {
+                  "type": "string"
+                },
+                "exampleSentence": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "title",
+          "cefrLevel",
+          "visibility",
+          "cards"
+        ]
+      },
+      "SrsReviewSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "cardId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "rating": {
+            "type": "number",
+            "enum": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "description": "1=Again, 2=Hard, 3=Good, 4=Easy"
+          }
+        },
+        "required": [
+          "cardId",
+          "rating"
+        ]
+      },
+      "StartExamSessionSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "examId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "TEST",
+              "PRACTICE"
+            ]
+          },
+          "parts": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "examId",
+          "mode"
+        ]
+      },
+      "SaveExamAnswersSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "questionNumber": {
+                  "type": "number"
+                },
+                "selectedValue": {
+                  "type": "string"
+                },
+                "isFlagged": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "required": [
+          "answers"
+        ]
+      },
+      "CreateCommentSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "targetType": {
+            "type": "string",
+            "enum": [
+              "LESSON",
+              "STORY",
+              "EXAM"
+            ]
+          },
+          "targetId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "content": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "targetType",
+          "targetId",
+          "content"
+        ]
+      },
+      "CreateSpeakingRoomSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Evening IELTS Speaking Practice"
+          },
+          "topic": {
+            "type": "string",
+            "example": "IELTS Speaking"
+          },
+          "cefrLevel": {
+            "type": "string",
+            "enum": [
+              "A1",
+              "A2",
+              "B1",
+              "B2",
+              "C1",
+              "C2"
+            ]
+          },
+          "maxParticipants": {
+            "type": "number",
+            "minimum": 2,
+            "maximum": 5,
+            "default": 4
+          },
+          "isPrivate": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "name",
+          "topic",
+          "cefrLevel",
+          "maxParticipants",
+          "isPrivate"
+        ]
+      },
+      "CheckoutSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "planCode": {
+            "type": "string",
+            "example": "PRO_1M"
+          },
+          "provider": {
+            "type": "string",
+            "enum": [
+              "stripe",
+              "paddle",
+              "vietqr"
+            ]
+          },
+          "promoCode": {
+            "type": "string"
+          },
+          "affiliateCode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "planCode",
+          "provider"
+        ]
+      },
+      "WebhookSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "providerTxId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PAID",
+              "FAILED",
+              "REFUNDED"
+            ]
+          }
+        },
+        "required": [
+          "providerTxId",
+          "status"
+        ]
+      },
+      "ShopPurchaseSwaggerDto": {
+        "type": "object",
+        "properties": {
+          "itemId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "itemId"
+        ]
+      }
+    }
+  }
+}

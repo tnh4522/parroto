@@ -1,0 +1,10 @@
+# Known Limitations & Environmental Boundaries
+
+1. **Loopback Chrome CDP Endpoint Unreachable (`Phase 0 Check`)**: `list_browser_targets` against `http://127.0.0.1:9222` failed with `provider_unavailable` because Chrome/Edge must be launched with `--remote-debugging-port=9222` before active CDP recon/capture tools can attach.
+2. **Docker Runtime Not Active Locally**: Docker Desktop Linux engine was offline during verification; PostgreSQL migrations were generated and schema-validated via Prisma CLI, while integration test suites exercised HTTP APIs against in-memory Prisma/Storage/Redis doubles (`REDIS_URL=memory`).
+3. **External AI, OAuth & Billing Sandboxes Unconfigured**: Live third-party calls to Azure AI Speech, Deepgram, Gemini Interactions API, Google/Apple OAuth, and Stripe/Paddle/VietQR require environment secrets before end-to-end vendor smoke tests.
+4. **Cross-Browser Native Engines**: Playwright E2E verified **Google Chrome (Desktop)** and **Microsoft Edge (Mobile)**; native Firefox and WebKit browser binaries were not downloaded locally and remain for CI execution.
+5. **Client WebRTC Signaling & YouTube End-Cue Precision**:
+   - Backend `/ws/community` Gateway (`CommunityGateway`) handles WebRTC/chat signaling events, while [SpeakingLobbyView.tsx](file:///d:/parroto/apps/web/src/features/speaking/components/SpeakingLobbyView.tsx) currently implements REST room creation/joining UI without live client `RTCPeerConnection` media mesh binding.
+   - [MediaPlayerSurface.tsx](file:///d:/parroto/apps/web/src/features/lessons/components/MediaPlayerSurface.tsx) executes millisecond `SegmentClock` auto-stop for `<audio>`/`<video>` streams; `YOUTUBE` embeds seek to cue start without YouTube IFrame Player API frame-exact auto-stop hooks.
+6. **Administration UI Console Deferred**: Backend role guards (`RolesGuard`, `@Roles("ADMIN")`) exist in `core/security`, while dedicated Admin content-authoring/moderation UI pages remain planned for Phase 7 administration expansion.

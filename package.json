@@ -1,0 +1,24 @@
+{
+  "name": "linguacraft-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace @linguacraft/web run dev",
+    "dev:api": "npm --workspace @linguacraft/api run dev",
+    "build": "npm --workspace @linguacraft/api run build && npm --workspace @linguacraft/web run build",
+    "lint": "npm --workspace @linguacraft/web run lint",
+    "typecheck": "npm --workspace @linguacraft/contracts run typecheck && npm --workspace @linguacraft/web run typecheck && npm --workspace @linguacraft/api run typecheck",
+    "test": "npm --workspace @linguacraft/web run test && npm --workspace @linguacraft/api run test",
+    "test:api": "npm --workspace @linguacraft/api run test",
+    "test:e2e": "playwright test",
+    "check": "npm run lint && npm run typecheck && npm run test",
+    "prepare": "node -e \"const {execSync}=require('child_process');try{execSync('git rev-parse --git-dir',{stdio:'ignore'});execSync('git config core.hooksPath .githooks',{stdio:'ignore'})}catch{}\""
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "lighthouse": "^13.6.0"
+  }
+}
