@@ -19,19 +19,20 @@ services:
     volumes:
       - redisdata:/data
 
-  localstack:
-    image: localstack/localstack:latest
+  minio:
+    image: cgr.dev/chainguard/minio:latest
     restart: unless-stopped
+    command: server /data --console-address ":9001"
     environment:
-      SERVICES: s3
-      DEBUG: 1
-      DATA_DIR: /tmp/localstack/data
+      MINIO_ROOT_USER: linguacraft_minio
+      MINIO_ROOT_PASSWORD: linguacraft_minio_password
     ports:
-      - "4566:4566"
+      - "9000:9000"
+      - "9001:9001"
     volumes:
-      - localstackdata:/tmp/localstack
+      - miniodata:/data
 
 volumes:
   pgdata:
   redisdata:
-  localstackdata:
+  miniodata:
