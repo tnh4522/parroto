@@ -8,7 +8,7 @@ import { OnboardingForm } from "@/features/auth/components/OnboardingForm";
 import { apiClient } from "@/shared/api/api-client";
 import { ApiClientError } from "@/shared/api/client";
 import { useAuthStore } from "@/shared/stores/auth-store";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 import { ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
 function VerifyMagicLinkContent() {
@@ -71,8 +71,8 @@ function VerifyMagicLinkContent() {
       <div className="w-full max-w-md space-y-4">
         <ErrorState title="Link invalid or expired" message={errorMessage} />
         <div className="flex justify-center">
-          <Link href="/login">
-            <Button variant="outline">Request a new link</Button>
+          <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+            Request a new link
           </Link>
         </div>
       </div>

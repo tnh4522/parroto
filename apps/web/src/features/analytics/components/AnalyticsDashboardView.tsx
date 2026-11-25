@@ -12,7 +12,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -165,8 +165,11 @@ export function AnalyticsDashboardView() {
           title={`No completed ${track} sessions yet`}
           description={`Complete your first ${track} mock test or practice set to populate score trends and weak-area diagnostics.`}
           action={
-            <Link href={track === "IELTS" ? "/exams/ielts" : "/exams/toeic"}>
-              <Button variant="primary">Explore {track} Exams</Button>
+            <Link
+              href={track === "IELTS" ? "/exams/ielts" : "/exams/toeic"}
+              className={buttonVariants({ variant: "primary" })}
+            >
+              Explore {track} Exams
             </Link>
           }
         />
@@ -209,7 +212,7 @@ export function AnalyticsDashboardView() {
                         style={{ height: `${pct}%` }}
                         title={`${point.examTitle}: ${point.score}`}
                       />
-                      <span className="line-clamp-1 text-center text-[10px] text-slate-500">
+                      <span className="line-clamp-1 text-center text-xs text-slate-500 dark:text-slate-400">
                         {point.examTitle}
                       </span>
                     </div>
@@ -249,7 +252,14 @@ export function AnalyticsDashboardView() {
                         {Math.round(area.accuracyPct)}%
                       </span>
                     </div>
-                    <div className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div
+                      className="h-2 overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"
+                      role="progressbar"
+                      aria-label={`${area.tag} accuracy`}
+                      aria-valuemin={0}
+                      aria-valuemax={100}
+                      aria-valuenow={Math.round(area.accuracyPct)}
+                    >
                       <div
                         className={cn(
                           "h-full rounded-full",
@@ -295,10 +305,9 @@ export function AnalyticsDashboardView() {
                   {item.status === "COMPLETED" ? (
                     <Link
                       href={`/exams/${track.toLowerCase()}/result/${encodeURIComponent(item.id)}`}
+                      className={buttonVariants({ variant: "outline", size: "sm" })}
                     >
-                      <Button variant="outline" size="sm">
-                        View Result
-                      </Button>
+                      View Result
                     </Link>
                   ) : null}
                 </div>

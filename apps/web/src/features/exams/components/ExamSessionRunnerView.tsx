@@ -24,7 +24,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -75,8 +75,11 @@ export function ExamSessionRunnerView({
   const [remainingSec, setRemainingSec] = useState<number | null>(null);
   const [saveBanner, setSaveBanner] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [confirmAbandon, setConfirmAbandon] = useState(false);
 
-  // Hydrate answers & countdown once fetched
+  const draftStorageKey = `linguacraft-exam-draft-${sessionId}`;
+
+  // Hydrate answers (merging local draft if newer) & countdown once fetched
   useEffect(() => {
     const data = questionsQuery.data;
     if (!data || answersHydrated) return;
@@ -90,6 +93,23 @@ export function ExamSessionRunnerView({
           isFlagged: val.isFlagged,
         };
       }
+    }
+    try {
+      const rawDraft = window.localStorage.getItem(draftStorageKey);
+      if (rawDraft) {
+        const parsed = JSON.parse(rawDraft) as Record<string, LocalAnswerEntry>;
+        for (const [key, val] of Object.entries(parsed)) {
+          const qn = Number(key);
+          if (Number.isFinite(qn) && val && typeof val.selectedValue === "string") {
+            initial[qn] = {
+              selectedValue: val.selectedValue,
+              isFlagged: Boolean(val.isFlagged),
+            };
+          }
+        }
+      }
+    } catch {
+      // Ignore draft parse/storage issues
     }
     setAnswersMap(initial);
     setAnswersHydrated(true);
@@ -105,7 +125,17 @@ export function ExamSessionRunnerView({
       );
       setRemainingSec(diffSec);
     }
-  }, [questionsQuery.data, answersHydrated, activePart]);
+  }, [questionsQuery.data, answersHydrated, activePart, draftStorageKey]);
+
+  // Persist local answer drafts while answering
+  useEffect(() => {
+    if (!answersHydrated) return;
+    try {
+      window.localStorage.setItem(draftStorageKey, JSON.stringify(answersMap));
+    } catch {
+      // Ignore storage quota errors
+    }
+  }, [answersMap, answersHydrated, draftStorageKey]);
 
   const handleSubmitExam = useCallback(async () => {
     setActionError(null);
@@ -119,13 +149,18 @@ export function ExamSessionRunnerView({
         await saveMutation.mutateAsync(payload);
       }
       await submitMutation.mutateAsync();
+      try {
+        window.localStorage.removeItem(draftStorageKey);
+      } catch {
+        // Ignore storage errors
+      }
       router.push(`/exams/${trackLower}/result/${encodeURIComponent(sessionId)}`);
     } catch (err) {
       setActionError(
         err instanceof Error ? err.message : "Could not submit exam session."
       );
     }
-  }, [answersMap, saveMutation, submitMutation, router, trackLower, sessionId]);
+  }, [answersMap, saveMutation, submitMutation, router, trackLower, sessionId, draftStorageKey]);
 
   // Countdown tick for TEST mode
   useEffect(() => {
@@ -219,6 +254,11 @@ export function ExamSessionRunnerView({
   const handleAbandon = async () => {
     try {
       await abandonMutation.mutateAsync();
+      try {
+        window.localStorage.removeItem(draftStorageKey);
+      } catch {
+        // Ignore storage errors
+      }
       router.push(`/exams/${trackLower}`);
     } catch (err) {
       setActionError(
@@ -272,8 +312,11 @@ export function ExamSessionRunnerView({
       <EmptyState
         title="No questions in this exam session"
         action={
-          <Link href={`/exams/${trackLower}`}>
-            <Button variant="outline">Back to {track}</Button>
+          <Link
+            href={`/exams/${trackLower}`}
+            className={buttonVariants({ variant: "outline" })}
+          >
+            Back to {track}
           </Link>
         }
       />
@@ -313,15 +356,39 @@ export function ExamSessionRunnerView({
             <Save className="h-4 w-4" aria-hidden="true" />
             Save Progress
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            isLoading={abandonMutation.isPending}
-            onClick={() => void handleAbandon()}
-          >
-            Abandon
-          </Button>
+          {confirmAbandon ? (
+            <div className="flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-2.5 py-1 dark:border-red-900 dark:bg-red-950/40">
+              <span className="text-xs font-semibold text-red-700 dark:text-red-300">
+                Abandon session?
+              </span>
+              <Button
+                type="button"
+                variant="danger"
+                size="sm"
+                isLoading={abandonMutation.isPending}
+                onClick={() => void handleAbandon()}
+              >
+                Confirm
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => setConfirmAbandon(false)}
+              >
+                Cancel
+              </Button>
+            </div>
+          ) : (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => setConfirmAbandon(true)}
+            >
+              Abandon
+            </Button>
+          )}
           <Button
             type="button"
             variant="primary"

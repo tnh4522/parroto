@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Clock, Headphones, Mic, PlayCircle, Sparkles } from "lucide-react";
 import type { LessonSummary } from "@linguacraft/contracts";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 
 function formatDuration(seconds: number): string {
@@ -28,7 +28,7 @@ export function LessonCard({ lesson }: { lesson: LessonSummary }) {
                 <Badge variant="success">Free</Badge>
               )}
             </div>
-            <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-500">
+            <span className="inline-flex items-center gap-1 text-xs font-medium text-slate-500 dark:text-slate-400">
               <Clock className="h-3.5 w-3.5" aria-hidden="true" />
               {formatDuration(lesson.durationSec)}
             </span>
@@ -50,7 +50,7 @@ export function LessonCard({ lesson }: { lesson: LessonSummary }) {
               {lesson.topics.slice(0, 3).map((topic) => (
                 <span
                   key={topic}
-                  className="rounded-md bg-slate-100 px-2 py-0.5 text-[11px] font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+                  className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600 dark:bg-slate-800 dark:text-slate-300"
                 >
                   #{topic}
                 </span>
@@ -60,21 +60,23 @@ export function LessonCard({ lesson }: { lesson: LessonSummary }) {
         </div>
 
         <div className="grid grid-cols-2 gap-2 pt-2">
-          <Link href={`/dictation/${encodeURIComponent(lesson.slug)}`}>
-            <Button variant="outline" size="sm" className="w-full">
-              <Headphones className="h-3.5 w-3.5" aria-hidden="true" />
-              Dictation
-            </Button>
+          <Link
+            href={`/dictation/${encodeURIComponent(lesson.slug)}`}
+            className={buttonVariants({ variant: "outline", size: "sm", className: "w-full" })}
+          >
+            <Headphones className="h-3.5 w-3.5" aria-hidden="true" />
+            Dictation
           </Link>
-          <Link href={`/shadowing/${encodeURIComponent(lesson.slug)}`}>
-            <Button variant="primary" size="sm" className="w-full">
-              {lesson.mediaType === "AUDIO" ? (
-                <PlayCircle className="h-3.5 w-3.5" aria-hidden="true" />
-              ) : (
-                <Mic className="h-3.5 w-3.5" aria-hidden="true" />
-              )}
-              Shadowing
-            </Button>
+          <Link
+            href={`/shadowing/${encodeURIComponent(lesson.slug)}`}
+            className={buttonVariants({ variant: "primary", size: "sm", className: "w-full" })}
+          >
+            {lesson.mediaType === "AUDIO" ? (
+              <PlayCircle className="h-3.5 w-3.5" aria-hidden="true" />
+            ) : (
+              <Mic className="h-3.5 w-3.5" aria-hidden="true" />
+            )}
+            Shadowing
           </Link>
         </div>
       </CardContent>

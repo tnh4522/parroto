@@ -5,6 +5,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { authUserSchema, refreshTokenResponseSchema } from "@linguacraft/contracts";
 import { apiClient } from "@/shared/api/api-client";
 import { useAuthStore } from "@/shared/stores/auth-store";
+import { useGlobalUiStore } from "@/shared/stores/ui-store";
 
 export function AppProviders({ children }: { children: ReactNode }) {
   const [queryClient] = useState(
@@ -21,6 +22,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    useGlobalUiStore.getState().hydrateTheme();
     let active = true;
     const store = useAuthStore.getState();
     if (store.status !== "loading") {

@@ -255,55 +255,68 @@ export function MediaPlayerSurface({
       ) : null}
 
       {/* Progress Track */}
-      <div className="space-y-1.5">
-        <div
-          className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"
-          role="progressbar"
-          aria-label="Segment playback progress"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(progressPct)}
-        >
-          <div
-            className="h-full bg-blue-600 transition-[width] duration-75"
-            style={{ width: `${progressPct}%` }}
-          />
-        </div>
-        <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
-          <span>
-            {formatMs(currentMs)} / {formatMs(activeCue ? activeCue.endMs : durationMs)}
-          </span>
+      {mediaType === "YOUTUBE" ? (
+        <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300">
+          <span>Use the YouTube player above to play or pause.</span>
           {activeCue ? (
-            <span>
-              Segment window: {formatMs(activeCue.startMs)} – {formatMs(activeCue.endMs)}
+            <span className="font-semibold">
+              Cue: {formatMs(activeCue.startMs)} – {formatMs(activeCue.endMs)}
             </span>
           ) : null}
         </div>
-      </div>
+      ) : (
+        <div className="space-y-1.5">
+          <div
+            className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800"
+            role="progressbar"
+            aria-label="Segment playback progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progressPct)}
+          >
+            <div
+              className="h-full bg-blue-600 transition-[width] duration-75"
+              style={{ width: `${progressPct}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+            <span>
+              {formatMs(currentMs)} / {formatMs(activeCue ? activeCue.endMs : durationMs)}
+            </span>
+            {activeCue ? (
+              <span>
+                Segment window: {formatMs(activeCue.startMs)} – {formatMs(activeCue.endMs)}
+              </span>
+            ) : null}
+          </div>
+        </div>
+      )}
 
       {/* Controls Bar */}
       <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
         <div className="flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="primary"
-            size="sm"
-            onClick={() => void togglePlay()}
-            disabled={!signedMediaUrl || mediaType === "YOUTUBE"}
-            aria-label={isPlaying ? "Pause audio" : "Play audio"}
-          >
-            {isPlaying ? (
-              <>
-                <Pause className="h-4 w-4" aria-hidden="true" />
-                Pause
-              </>
-            ) : (
-              <>
-                <Play className="h-4 w-4" aria-hidden="true" />
-                Play
-              </>
-            )}
-          </Button>
+          {mediaType !== "YOUTUBE" ? (
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={() => void togglePlay()}
+              disabled={!signedMediaUrl}
+              aria-label={isPlaying ? "Pause audio" : "Play audio"}
+            >
+              {isPlaying ? (
+                <>
+                  <Pause className="h-4 w-4" aria-hidden="true" />
+                  Pause
+                </>
+              ) : (
+                <>
+                  <Play className="h-4 w-4" aria-hidden="true" />
+                  Play
+                </>
+              )}
+            </Button>
+          ) : null}
 
           <Button
             type="button"
@@ -337,7 +350,7 @@ export function MediaPlayerSurface({
               value={playbackRate}
               onChange={(e) => onPlaybackRateChange(Number(e.target.value))}
               className={cn(
-                "rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs font-semibold text-slate-800 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                "rounded-lg border-2 border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
               )}
             >
               {PLAYBACK_RATES.map((rate) => (

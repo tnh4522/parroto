@@ -1,0 +1,25 @@
+{
+  "buildPath": "code",
+  "hook": {
+    "enabled": true,
+    "quiet": false,
+    "perEditRules": "immediate"
+  },
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [
+      "apps/api/**",
+      "packages/**",
+      "e2e/**",
+      "docs/**",
+      "research/**",
+      "**/*.test.ts",
+      "**/*.test.tsx",
+      "**/*.spec.ts"
+    ],
+    "ignoreValues": [],
+    "designSystem": {
+      "enabled": true
+    }
+  }
+}

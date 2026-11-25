@@ -12,7 +12,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -146,8 +146,11 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
             >
               Sign in
             </Button>
-            <Link href="/vocabulary">
-              <Button variant="outline">Browse Vocabulary Decks</Button>
+            <Link
+              href="/vocabulary"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              Browse Vocabulary Decks
             </Link>
           </div>
         </CardContent>
@@ -181,11 +184,12 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
           <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
             Flashcards (SM-2)
           </h1>
-          <Link href="/vocabulary">
-            <Button variant="outline" size="sm">
-              <Layers className="h-4 w-4" aria-hidden="true" />
-              Browse Decks
-            </Button>
+          <Link
+            href="/vocabulary"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            <Layers className="h-4 w-4" aria-hidden="true" />
+            Browse Decks
           </Link>
         </div>
 
@@ -210,8 +214,8 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
                 <RotateCw className="h-4 w-4" aria-hidden="true" />
                 Refresh Queue
               </Button>
-              <Link href="/vocabulary">
-                <Button variant="primary">Explore Vocabulary</Button>
+              <Link href="/vocabulary" className={buttonVariants({ variant: "primary" })}>
+                Explore Vocabulary
               </Link>
             </div>
           }
@@ -236,10 +240,11 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
             {deckSlug ? ` · Deck: ${deckSlug}` : ""}
           </p>
         </div>
-        <Link href="/vocabulary">
-          <Button variant="outline" size="sm">
-            All Decks
-          </Button>
+        <Link
+          href="/vocabulary"
+          className={buttonVariants({ variant: "outline", size: "sm" })}
+        >
+          All Decks
         </Link>
       </div>
 
@@ -251,7 +256,14 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
           </span>
           <span>{progressPct}%</span>
         </div>
-        <div className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+        <div
+          className="h-2 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800"
+          role="progressbar"
+          aria-label="Flashcards session progress"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={progressPct}
+        >
           <div
             className="h-full bg-blue-600 transition-[width] duration-150"
             style={{ width: `${progressPct}%` }}
@@ -313,7 +325,9 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
                 <Eye className="h-4 w-4" aria-hidden="true" />
                 Reveal Answer
               </Button>
-              <span className="text-xs text-slate-400">Press Space to flip</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Press Space to flip
+              </span>
             </div>
           ) : (
             <div className="space-y-5 border-t border-slate-200 pt-5 dark:border-slate-800">
@@ -350,7 +364,7 @@ export function FlashcardsView({ deckSlug }: { deckSlug?: string }) {
                     )}
                   >
                     <span className="text-sm font-bold">{btn.label}</span>
-                    <span className="text-[11px] opacity-80">{btn.hint}</span>
+                    <span className="text-xs opacity-80">{btn.hint}</span>
                   </button>
                 ))}
               </div>

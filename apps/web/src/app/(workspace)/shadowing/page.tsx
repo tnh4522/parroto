@@ -10,7 +10,7 @@ export default function ShadowingIndexPage() {
     <LessonLibraryView
       defaultMode="SHADOWING"
       heading="Shadowing Practice"
-      subheading="Imitate native cadence and check pronunciation accuracy against IPA phonemes."
+      subheading="Imitate native cadence and review word-by-word transcript alignment with IPA reference."
     />
   );
 }

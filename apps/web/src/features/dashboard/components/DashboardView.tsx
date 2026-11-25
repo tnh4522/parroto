@@ -6,7 +6,7 @@ import { LessonCard } from "@/features/lessons/components/LessonCard";
 import { ApiClientError } from "@/shared/api/client";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 import { useDailyLessonsQuery, useStreakCheckinMutation } from "../api/dashboard-api";
@@ -186,10 +186,11 @@ export function DashboardView() {
             title="No featured lessons today"
             description="Explore the full lesson library to choose a topic and CEFR level."
             action={
-              <Link href="/lessons">
-                <Button variant="outline" size="sm">
-                  Open Lesson Library
-                </Button>
+              <Link
+                href="/lessons"
+                className={buttonVariants({ variant: "outline", size: "sm" })}
+              >
+                Open Lesson Library
               </Link>
             }
           />

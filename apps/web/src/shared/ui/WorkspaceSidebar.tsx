@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight, LogIn, LogOut, X } from "lucide-react";
+import { useEffect } from "react";
 import { useLogoutMutation } from "@/features/auth/api/auth-api";
 import { WORKSPACE_NAV_ITEMS } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
@@ -30,32 +31,41 @@ function SidebarNavList({
   const openLoginModal = useGlobalUiStore((s) => s.openLoginModal);
   const logout = useLogoutMutation();
 
+  const learningItems = WORKSPACE_NAV_ITEMS.filter((i) => i.group === "learning");
+  const secondaryItems = WORKSPACE_NAV_ITEMS.filter((i) => i.group !== "learning");
+
+  const renderLink = (item: (typeof WORKSPACE_NAV_ITEMS)[number]) => {
+    const Icon = item.icon;
+    const active = isActivePath(pathname, item.href);
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={onNavigate}
+        title={collapsed ? item.label : undefined}
+        aria-label={collapsed ? item.label : undefined}
+        aria-current={active ? "page" : undefined}
+        className={cn(
+          "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+          active
+            ? "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300"
+            : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/70 dark:hover:text-white",
+          collapsed && "justify-center px-2"
+        )}
+      >
+        <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
+        {!collapsed ? <span className="truncate">{item.label}</span> : null}
+      </Link>
+    );
+  };
+
   return (
     <div className="flex h-full flex-col justify-between gap-4 p-3">
-      <nav aria-label="Workspace navigation" className="space-y-1">
-        {WORKSPACE_NAV_ITEMS.map((item) => {
-          const Icon = item.icon;
-          const active = isActivePath(pathname, item.href);
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={onNavigate}
-              title={collapsed ? item.label : undefined}
-              aria-current={active ? "page" : undefined}
-              className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-semibold transition-colors",
-                active
-                  ? "bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300"
-                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800/70 dark:hover:text-white",
-                collapsed && "justify-center px-2"
-              )}
-            >
-              <Icon className="h-5 w-5 shrink-0" aria-hidden="true" />
-              {!collapsed ? <span className="truncate">{item.label}</span> : null}
-            </Link>
-          );
-        })}
+      <nav aria-label="Workspace navigation" className="space-y-3">
+        <div className="space-y-1">{learningItems.map(renderLink)}</div>
+        <div className="space-y-1 border-t border-slate-200 pt-3 dark:border-slate-800">
+          {secondaryItems.map(renderLink)}
+        </div>
       </nav>
 
       <div className="border-t border-slate-200 pt-3 dark:border-slate-800">
@@ -67,7 +77,7 @@ function SidebarNavList({
                   <p className="truncate text-xs font-bold text-slate-900 dark:text-white">
                     {user.displayName}
                   </p>
-                  <p className="truncate text-[11px] text-slate-500">
+                  <p className="truncate text-xs text-slate-500 dark:text-slate-400">
                     @{user.username ?? "onboarding"}
                   </p>
                 </div>
@@ -79,7 +89,8 @@ function SidebarNavList({
             <Button
               variant="ghost"
               size="sm"
-              className="w-full justify-start"
+              aria-label={collapsed ? "Sign out" : undefined}
+              className={cn("w-full", collapsed ? "justify-center px-2" : "justify-start")}
               onClick={() => logout.mutate()}
               isLoading={logout.isPending}
             >
@@ -91,6 +102,7 @@ function SidebarNavList({
           <Button
             variant="primary"
             size="sm"
+            aria-label={collapsed ? "Sign In" : undefined}
             className="w-full"
             onClick={() => openLoginModal()}
           >
@@ -108,6 +120,18 @@ export function WorkspaceSidebar() {
   const toggleCollapsed = useGlobalUiStore((s) => s.toggleSidebarCollapsed);
   const mobileOpen = useGlobalUiStore((s) => s.isMobileDrawerOpen);
   const setMobileOpen = useGlobalUiStore((s) => s.setMobileDrawerOpen);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [mobileOpen, setMobileOpen]);
 
   return (
     <>

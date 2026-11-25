@@ -28,7 +28,7 @@ const variantClasses: Record<ButtonVariant, string> = {
     "bg-transparent text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800",
   danger:
     "bg-red-600 text-white border-b-2 border-red-800 hover:bg-red-700 active:translate-y-px",
-  pro: "bg-gradient-to-r from-amber-500 to-orange-500 text-white border-b-2 border-amber-700 hover:from-amber-600 hover:to-orange-600",
+  pro: "bg-gradient-to-r from-amber-700 to-orange-700 text-white border-b-2 border-amber-900 hover:from-amber-800 hover:to-orange-800",
 };
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -37,6 +37,23 @@ const sizeClasses: Record<ButtonSize, string> = {
   lg: "h-12 px-6 text-base rounded-xl",
   icon: "h-10 w-10 rounded-xl",
 };
+
+export function buttonVariants({
+  variant = "primary",
+  size = "md",
+  className,
+}: {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
+} = {}): string {
+  return cn(
+    "inline-flex items-center justify-center gap-2 font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
+    variantClasses[variant],
+    sizeClasses[size],
+    className
+  );
+}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -57,12 +74,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       type={type}
       disabled={disabled || isLoading}
       aria-busy={isLoading || undefined}
-      className={cn(
-        "inline-flex items-center justify-center gap-2 font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer",
-        variantClasses[variant],
-        sizeClasses[size],
-        className
-      )}
+      className={buttonVariants({ variant, size, className })}
       {...props}
     >
       {isLoading ? (

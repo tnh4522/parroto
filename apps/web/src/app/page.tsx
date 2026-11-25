@@ -2,31 +2,31 @@ import Link from "next/link";
 import { ArrowRight, FileCheck2, Headphones, Layers, Mic } from "lucide-react";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { MarketingShell } from "@/shared/ui/MarketingShell";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 
 const CAPABILITIES = [
   {
     href: "/dictation",
     title: "Audio Dictation",
-    desc: "Sentence-by-sentence listening drills with speed control and accuracy checks.",
+    desc: "Sentence-by-sentence listening drills with speed control and instant word checks.",
     icon: Headphones,
   },
   {
     href: "/shadowing",
-    title: "Phonetic Shadowing",
-    desc: "On-device speech recognition with IPA alignment feedback and mic playback.",
+    title: "Voice Shadowing",
+    desc: "Speak along with native cues using browser speech matching and IPA reference.",
     icon: Mic,
   },
   {
     href: "/flashcards",
     title: "Spaced Repetition",
-    desc: "SM-2 vocabulary scheduling synced across personal and curated decks.",
+    desc: "Deterministic SM-2 flashcard scheduling across personal and curated study decks.",
     icon: Layers,
   },
   {
     href: "/exams/ielts",
     title: "IELTS & TOEIC Mocks",
-    desc: "Timed Test Mode and instant-check Practice Mode with band & scaled scoring.",
+    desc: "Timed Test Mode and instant-check Practice Mode with band and scaled scores.",
     icon: FileCheck2,
   },
 ];
@@ -36,24 +36,23 @@ export default function HomePage() {
     <MarketingShell>
       <main className="mx-auto max-w-6xl space-y-12 px-4 py-14 sm:px-6">
         <section className="space-y-5 text-center">
-          <h1 className="mx-auto max-w-3xl text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
-            Master English Through Active Listening, Speaking &amp; Exam Practice
+          <h1 className="mx-auto max-w-3xl text-balance text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl dark:text-white">
+            Active English Listening, Speaking &amp; Exam Practice
           </h1>
           <p className="mx-auto max-w-2xl text-base text-slate-600 dark:text-slate-300">
-            Browser-native audio synchronization, spaced-repetition flashcards, and
-            full-length IELTS and TOEIC simulations.
+            Synchronized sentence audio drills, SM-2 spaced-repetition flashcards, and
+            full-length IELTS and TOEIC simulations in one focused studio.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-            <Link href="/dashboard">
-              <Button size="lg">
-                Enter Workspace
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Button>
+            <Link href="/dashboard" className={buttonVariants({ size: "lg" })}>
+              Open Workspace
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </Link>
-            <Link href="/login">
-              <Button variant="outline" size="lg">
-                Sign In
-              </Button>
+            <Link
+              href="/login"
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+            >
+              Sign In
             </Link>
           </div>
         </section>
@@ -65,16 +64,23 @@ export default function HomePage() {
           {CAPABILITIES.map((cap) => {
             const Icon = cap.icon;
             return (
-              <Link key={cap.href} href={cap.href} className="group block">
+              <Link
+                key={cap.href}
+                href={cap.href}
+                className="group block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              >
                 <Card className="h-full transition-colors group-hover:border-blue-500/60">
-                  <CardContent className="space-y-2 p-5">
-                    <div className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600 dark:bg-blue-950 dark:text-blue-300">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
+                  <CardContent className="space-y-2.5 p-5">
+                    <div className="flex items-center gap-2.5">
+                      <Icon
+                        className="h-5 w-5 shrink-0 text-blue-600 dark:text-blue-400"
+                        aria-hidden="true"
+                      />
+                      <h2 className="text-base font-bold text-slate-900 dark:text-white">
+                        {cap.title}
+                      </h2>
                     </div>
-                    <h2 className="text-base font-bold text-slate-900 dark:text-white">
-                      {cap.title}
-                    </h2>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                       {cap.desc}
                     </p>
                   </CardContent>

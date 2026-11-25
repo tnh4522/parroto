@@ -14,7 +14,10 @@ export function OnboardingForm({ nextPath = "/dashboard" }: { nextPath?: string 
   const [username, setUsername] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [preferredTranslateLang, setPreferredTranslateLang] = useState("vi");
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<{
+    field: string;
+    message: string;
+  } | null>(null);
   const onboarding = useOnboardingMutation();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -29,7 +32,11 @@ export function OnboardingForm({ nextPath = "/dashboard" }: { nextPath?: string 
 
     const parsed = onboardingUpdateSchema.safeParse(candidate);
     if (!parsed.success) {
-      setValidationError(parsed.error.issues[0]?.message ?? "Invalid input");
+      const issue = parsed.error.issues[0];
+      setValidationError({
+        field: String(issue?.path[0] ?? "form"),
+        message: issue?.message ?? "Invalid input",
+      });
       return;
     }
 
@@ -69,7 +76,7 @@ export function OnboardingForm({ nextPath = "/dashboard" }: { nextPath?: string 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="e.g. alex_learner"
-              hasError={Boolean(validationError)}
+              hasError={validationError?.field === "username"}
             />
           </div>
 
@@ -84,6 +91,7 @@ export function OnboardingForm({ nextPath = "/dashboard" }: { nextPath?: string 
               id="onboarding-birthdate"
               type="date"
               value={birthDate}
+              hasError={validationError?.field === "birthDate"}
               onChange={(e) => setBirthDate(e.target.value)}
             />
           </div>
@@ -115,7 +123,7 @@ export function OnboardingForm({ nextPath = "/dashboard" }: { nextPath?: string 
               role="alert"
               className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-medium text-red-700 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300"
             >
-              {validationError ?? serverError}
+              {validationError?.message ?? serverError}
             </p>
           ) : null}
 

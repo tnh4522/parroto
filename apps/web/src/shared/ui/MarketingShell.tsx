@@ -5,7 +5,7 @@ import { Menu, Moon, Sun, X } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { BrandLogo } from "@/shared/ui/BrandLogo";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { LoginModal } from "@/shared/ui/LoginModal";
 
 const MARKETING_LINKS = [
@@ -61,8 +61,8 @@ export function MarketingShell({ children }: { children: ReactNode }) {
               <Button variant="outline" size="sm" onClick={() => openLoginModal()}>
                 Sign In
               </Button>
-              <Link href="/dashboard">
-                <Button size="sm">Open Workspace</Button>
+              <Link href="/dashboard" className={buttonVariants({ size: "sm" })}>
+                Open Workspace
               </Link>
             </div>
 

@@ -39,7 +39,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -297,8 +297,11 @@ export function ShadowingWorkspace({ slug }: { slug: string }) {
               >
                 Sign in
               </Button>
-              <Link href="/shadowing">
-                <Button variant="outline">Back to lessons</Button>
+              <Link
+                href="/shadowing"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Back to lessons
               </Link>
             </div>
           </CardContent>
@@ -353,8 +356,11 @@ export function ShadowingWorkspace({ slug }: { slug: string }) {
                   Sign in
                 </Button>
               ) : null}
-              <Link href="/shadowing">
-                <Button variant="outline">Browse Free Lessons</Button>
+              <Link
+                href="/shadowing"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Browse Free Lessons
               </Link>
             </div>
           </CardContent>
@@ -427,10 +433,11 @@ export function ShadowingWorkspace({ slug }: { slug: string }) {
             </button>
           </div>
 
-          <Link href={`/dictation/${encodeURIComponent(slug)}`}>
-            <Button variant="outline" size="sm">
-              Switch to Dictation
-            </Button>
+          <Link
+            href={`/dictation/${encodeURIComponent(slug)}`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            Switch to Dictation
           </Link>
         </div>
       </div>
@@ -455,13 +462,19 @@ export function ShadowingWorkspace({ slug }: { slug: string }) {
           {/* Target Cue & Recording Studio */}
           <Card>
             <CardHeader className="flex flex-wrap items-center justify-between gap-2">
-              <span className="text-xs font-semibold text-slate-500">
+              <span className="text-xs font-semibold text-slate-500 dark:text-slate-400">
                 Sentence {currentIndex + 1} / {sentences.length}
               </span>
-              <span className="text-xs text-slate-500">
-                Mic status:{" "}
-                <strong className="capitalize text-slate-700 dark:text-slate-200">
-                  {micPermission}
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                Microphone:{" "}
+                <strong className="text-slate-700 dark:text-slate-200">
+                  {micPermission === "granted"
+                    ? "Ready"
+                    : micPermission === "denied"
+                      ? "Permission blocked"
+                      : micPermission === "requesting"
+                        ? "Requesting access..."
+                        : "Click Record to enable"}
                 </strong>
               </span>
             </CardHeader>
@@ -572,11 +585,11 @@ export function ShadowingWorkspace({ slug }: { slug: string }) {
                 <div className="space-y-3 rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
-                        Pronunciation Alignment
+                      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
+                        Transcript Word Alignment (IPA Reference)
                       </p>
                       <p className="text-sm font-bold text-slate-900 dark:text-white">
-                        Accuracy: {evaluation.accuracyScore}%
+                        Word match: {evaluation.accuracyScore}%
                         {attemptResult?.diamondsEarned
                           ? ` · +${attemptResult.diamondsEarned} Diamonds`
                           : ""}
@@ -668,7 +681,7 @@ export function ShadowingWorkspace({ slug }: { slug: string }) {
                         : "border-slate-200 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/60"
                     )}
                   >
-                    <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+                    <div className="mb-1 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
                       <span>Segment #{idx + 1}</span>
                       <span>
                         {Math.floor(cue.startMs / 1000)}s – {Math.floor(cue.endMs / 1000)}s

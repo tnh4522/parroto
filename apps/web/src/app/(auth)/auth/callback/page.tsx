@@ -7,7 +7,7 @@ import { useOAuthExchangeMutation } from "@/features/auth/api/auth-api";
 import { OnboardingForm } from "@/features/auth/components/OnboardingForm";
 import { consumePkceState } from "@/features/auth/lib/pkce";
 import { ApiClientError } from "@/shared/api/client";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 import { ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
 function OAuthCallbackContent() {
@@ -81,8 +81,8 @@ function OAuthCallbackContent() {
       <div className="w-full max-w-md space-y-4">
         <ErrorState title="Sign-in could not complete" message={localError} />
         <div className="flex justify-center">
-          <Link href="/login">
-            <Button variant="outline">Back to Sign In</Button>
+          <Link href="/login" className={buttonVariants({ variant: "outline" })}>
+            Back to Sign In
           </Link>
         </div>
       </div>

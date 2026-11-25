@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { Mail, CheckCircle2 } from "lucide-react";
 import { magicLinkRequestSchema } from "@linguacraft/contracts";
@@ -155,7 +154,7 @@ export function LoginForm({ nextPath = "/dashboard" }: LoginFormProps) {
 
             <div className="relative flex items-center justify-center">
               <span className="h-px w-full bg-slate-200 dark:bg-slate-800" />
-              <span className="bg-white px-3 text-xs font-medium uppercase tracking-wider text-slate-400 dark:bg-slate-900">
+              <span className="bg-white px-3 text-xs font-medium uppercase tracking-wider text-slate-500 dark:bg-slate-900 dark:text-slate-400">
                 or continue with
               </span>
               <span className="h-px w-full bg-slate-200 dark:bg-slate-800" />
@@ -213,18 +212,10 @@ export function LoginForm({ nextPath = "/dashboard" }: LoginFormProps) {
           </div>
         ) : null}
 
-        <div className="flex flex-col items-center gap-2 border-t border-slate-100 pt-4 text-center text-xs text-slate-500 dark:border-slate-800">
+        <div className="flex flex-col items-center gap-2 border-t border-slate-100 pt-4 text-center text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400">
           <Badge variant="info">PKCE &amp; Passwordless Security</Badge>
           <p>
-            By continuing, you agree to our{" "}
-            <Link href="/terms" className="font-semibold text-blue-600 hover:underline">
-              Terms of Service
-            </Link>{" "}
-            and{" "}
-            <Link href="/privacy" className="font-semibold text-blue-600 hover:underline">
-              Privacy Policy
-            </Link>
-            .
+            Explicit audio consent is requested separately before any cloud voice recording.
           </p>
         </div>
       </CardContent>

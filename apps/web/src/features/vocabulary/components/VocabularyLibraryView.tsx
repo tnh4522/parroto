@@ -17,7 +17,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { DataPagination } from "@/shared/ui/DataPagination";
 import { Input } from "@/shared/ui/Input";
@@ -168,7 +168,7 @@ export function VocabularyLibraryView() {
         <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
           <div className="relative">
             <Search
-              className="pointer-events-none absolute left-3 top-2.5 h-4 w-4 text-slate-400"
+              className="pointer-events-none absolute left-3 top-3 h-4 w-4 text-slate-500"
               aria-hidden="true"
             />
             <input
@@ -177,7 +177,7 @@ export function VocabularyLibraryView() {
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               placeholder="Search decks..."
-              className="h-9 w-56 rounded-xl border border-slate-300 bg-white pl-9 pr-3 text-sm text-slate-900 focus:border-blue-500 focus:outline-none dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+              className="h-10 w-56 rounded-xl border-2 border-slate-200 bg-white pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-400"
             />
           </div>
           <Button type="submit" variant="outline" size="sm">
@@ -257,7 +257,7 @@ export function VocabularyLibraryView() {
                 {draftCards.map((card, idx) => (
                   <div
                     key={idx}
-                    className="grid gap-2 rounded-xl border border-slate-200 p-3 sm:grid-cols-3 dark:border-slate-800"
+                    className="grid gap-2 rounded-xl border border-slate-200 p-3 sm:grid-cols-[1fr_1fr_1fr_auto] dark:border-slate-800"
                   >
                     <input
                       type="text"
@@ -271,7 +271,7 @@ export function VocabularyLibraryView() {
                           )
                         )
                       }
-                      className="h-9 rounded-lg border border-slate-300 px-2.5 text-sm dark:border-slate-700 dark:bg-slate-950"
+                      className="h-9 rounded-lg border border-slate-300 px-2.5 text-sm placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-950 dark:placeholder:text-slate-400"
                     />
                     <input
                       type="text"
@@ -285,7 +285,7 @@ export function VocabularyLibraryView() {
                           )
                         )
                       }
-                      className="h-9 rounded-lg border border-slate-300 px-2.5 text-sm dark:border-slate-700 dark:bg-slate-950"
+                      className="h-9 rounded-lg border border-slate-300 px-2.5 text-sm placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-950 dark:placeholder:text-slate-400"
                     />
                     <input
                       type="text"
@@ -301,8 +301,21 @@ export function VocabularyLibraryView() {
                           )
                         )
                       }
-                      className="h-9 rounded-lg border border-slate-300 px-2.5 text-sm dark:border-slate-700 dark:bg-slate-950"
+                      className="h-9 rounded-lg border border-slate-300 px-2.5 text-sm placeholder:text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-950 dark:placeholder:text-slate-400"
                     />
+                    {draftCards.length > 1 ? (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        aria-label={`Remove card ${idx + 1}`}
+                        onClick={() =>
+                          setDraftCards((prev) => prev.filter((_, i) => i !== idx))
+                        }
+                      >
+                        <X className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    ) : null}
                   </div>
                 ))}
               </div>
@@ -391,17 +404,20 @@ export function VocabularyLibraryView() {
                   <div className="flex items-center gap-2 pt-2">
                     <Link
                       href={`/vocabulary/${encodeURIComponent(deck.slug)}`}
-                      className="flex-1"
+                      className={buttonVariants({
+                        variant: "outline",
+                        size: "sm",
+                        className: "flex-1",
+                      })}
                     >
-                      <Button variant="outline" size="sm" className="w-full">
-                        <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
-                        Inspect Words
-                      </Button>
+                      <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+                      Inspect Words
                     </Link>
-                    <Link href={`/flashcards?deck=${encodeURIComponent(deck.slug)}`}>
-                      <Button variant="primary" size="sm">
-                        Study
-                      </Button>
+                    <Link
+                      href={`/flashcards?deck=${encodeURIComponent(deck.slug)}`}
+                      className={buttonVariants({ variant: "primary", size: "sm" })}
+                    >
+                      Study
                     </Link>
                   </div>
                 </CardContent>

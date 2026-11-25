@@ -30,7 +30,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -45,6 +45,8 @@ export function DictationWorkspace({ slug }: { slug: string }) {
   const authStatus = useAuthStore((s) => s.status);
   const openLoginModal = useGlobalUiStore((s) => s.openLoginModal);
   const openDictionaryModal = useGlobalUiStore((s) => s.openDictionaryModal);
+  const isDictionaryOpen = useGlobalUiStore((s) => s.isDictionaryModalOpen);
+  const isLoginOpen = useGlobalUiStore((s) => s.isLoginModalOpen);
 
   const detailQuery = useLessonDetailQuery(slug);
   const lessonId = detailQuery.data?.lesson.id ?? "";
@@ -166,20 +168,21 @@ export function DictationWorkspace({ slug }: { slug: string }) {
     setReplaySignal((s) => s + 1);
   }, []);
 
-  // Global lesson shortcuts while practicing dictation
+  // Non-trapping shortcuts while practicing dictation (skip when a modal is open)
   useEffect(() => {
+    if (isDictionaryOpen || isLoginOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Tab") {
+      if (event.altKey && event.key.toLowerCase() === "r") {
         event.preventDefault();
         handleReplay();
-      } else if (event.key === "`") {
+      } else if (event.altKey && event.key.toLowerCase() === "p") {
         event.preventDefault();
         setTogglePlaySignal((s) => s + 1);
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [handleReplay]);
+  }, [handleReplay, isDictionaryOpen, isLoginOpen]);
 
   if (detailQuery.isLoading) {
     return <LoadingState label="Loading dictation lesson..." />;
@@ -211,10 +214,11 @@ export function DictationWorkspace({ slug }: { slug: string }) {
               >
                 Sign in
               </Button>
-              <Link href="/dictation">
-                <Button type="button" variant="outline">
-                  Back to lessons
-                </Button>
+              <Link
+                href="/dictation"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Back to lessons
               </Link>
             </div>
           </CardContent>
@@ -274,10 +278,11 @@ export function DictationWorkspace({ slug }: { slug: string }) {
                   Sign in to check access
                 </Button>
               ) : null}
-              <Link href="/dictation">
-                <Button type="button" variant="outline">
-                  Browse Free Lessons
-                </Button>
+              <Link
+                href="/dictation"
+                className={buttonVariants({ variant: "outline" })}
+              >
+                Browse Free Lessons
               </Link>
             </div>
           </CardContent>
@@ -292,8 +297,8 @@ export function DictationWorkspace({ slug }: { slug: string }) {
         title="No transcript cues yet"
         description="This lesson does not have synchronized dictation sentences yet."
         action={
-          <Link href="/dictation">
-            <Button variant="outline">Back to lessons</Button>
+          <Link href="/dictation" className={buttonVariants({ variant: "outline" })}>
+            Back to lessons
           </Link>
         }
       />
@@ -327,10 +332,11 @@ export function DictationWorkspace({ slug }: { slug: string }) {
           <span className="rounded-lg bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
             Sentence {currentIndex + 1} / {sentences.length}
           </span>
-          <Link href={`/shadowing/${encodeURIComponent(slug)}`}>
-            <Button variant="outline" size="sm">
-              Switch to Shadowing
-            </Button>
+          <Link
+            href={`/shadowing/${encodeURIComponent(slug)}`}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            Switch to Shadowing
           </Link>
         </div>
       </div>
@@ -498,12 +504,12 @@ export function DictationWorkspace({ slug }: { slug: string }) {
                       void handleCheckAndSubmit();
                     }
                   }}
-                  placeholder="Listen carefully and transcribe this sentence... (Tab: replay, Enter: check)"
-                  className="w-full rounded-xl border border-slate-300 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"
+                  placeholder="Listen carefully and transcribe this sentence... (Alt+R: replay, Enter: check)"
+                  className="w-full rounded-xl border-2 border-slate-200 bg-white p-3 text-sm text-slate-900 placeholder:text-slate-500 focus-visible:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-400"
                 />
                 <p className="text-xs text-slate-500 dark:text-slate-400">
-                  Shortcuts: <kbd className="rounded border px-1">Tab</kbd> Replay ·{" "}
-                  <kbd className="rounded border px-1">`</kbd> Play/Pause ·{" "}
+                  Shortcuts: <kbd className="rounded border px-1">Alt+R</kbd> Replay ·{" "}
+                  <kbd className="rounded border px-1">Alt+P</kbd> Play/Pause ·{" "}
                   <kbd className="rounded border px-1">Enter</kbd> Check &amp; Submit ·
                   Click revealed words for dictionary
                 </p>
@@ -615,7 +621,7 @@ export function DictationWorkspace({ slug }: { slug: string }) {
                           : "border-slate-200 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800/60"
                       )}
                     >
-                      <div className="mb-1 flex items-center justify-between text-[11px] font-semibold text-slate-500">
+                      <div className="mb-1 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
                         <span>Cue #{idx + 1}</span>
                         <span>{Math.floor(sentence.startMs / 1000)}s</span>
                       </div>
@@ -623,7 +629,7 @@ export function DictationWorkspace({ slug }: { slug: string }) {
                         {sentence.text}
                       </p>
                       {translation ? (
-                        <p className="mt-1 text-[11px] text-slate-500 dark:text-slate-400">
+                        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                           {translation}
                         </p>
                       ) : null}

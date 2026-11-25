@@ -114,6 +114,6 @@ describe("SpeakingLobbyView", () => {
       );
     });
 
-    expect(screen.getByText("Live Room")).toBeInTheDocument();
+    expect(screen.getByText("Lobby Check-In")).toBeInTheDocument();
   });
 });

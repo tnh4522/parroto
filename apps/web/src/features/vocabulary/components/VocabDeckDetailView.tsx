@@ -6,7 +6,7 @@ import { useVocabDeckDetailQuery } from "@/features/vocabulary/api/vocabulary-ap
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -87,8 +87,11 @@ export function VocabDeckDetailView({ slug }: { slug: string }) {
           ) : null}
         </div>
 
-        <Link href={`/flashcards?deck=${encodeURIComponent(deck.slug)}`}>
-          <Button variant="primary">Practice in Flashcards</Button>
+        <Link
+          href={`/flashcards?deck=${encodeURIComponent(deck.slug)}`}
+          className={buttonVariants({ variant: "primary" })}
+        >
+          Practice in Flashcards
         </Link>
       </div>
 

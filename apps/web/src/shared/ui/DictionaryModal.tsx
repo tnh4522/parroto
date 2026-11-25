@@ -6,7 +6,7 @@ import {
   dictionaryWordResponseSchema,
 } from "@linguacraft/contracts";
 import { Search, Volume2, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { apiClient } from "@/shared/api/api-client";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Button } from "@/shared/ui/Button";
@@ -20,6 +20,33 @@ export function DictionaryModal() {
   const close = useGlobalUiStore((s) => s.closeDictionaryModal);
   const [queryText, setQueryText] = useState(initialWord);
   const [selectedWord, setSelectedWord] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      previousFocusRef.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      setQueryText(initialWord);
+      setSelectedWord(null);
+      requestAnimationFrame(() => inputRef.current?.focus());
+    } else if (previousFocusRef.current) {
+      previousFocusRef.current.focus();
+      previousFocusRef.current = null;
+    }
+  }, [isOpen, initialWord]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        close();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, close]);
 
   const trimmed = (queryText || initialWord).trim();
 
@@ -55,6 +82,9 @@ export function DictionaryModal() {
       role="dialog"
       aria-modal="true"
       aria-labelledby="dict-modal-title"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) close();
+      }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4 backdrop-blur-xs"
     >
       <div className="flex max-h-[85vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl border-2 border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900">
@@ -70,10 +100,11 @@ export function DictionaryModal() {
         <div className="border-b border-slate-100 p-4 dark:border-slate-800">
           <div className="relative">
             <Search
-              className="pointer-events-none absolute top-3 left-3 h-4 w-4 text-slate-400"
+              className="pointer-events-none absolute top-3 left-3 h-4 w-4 text-slate-500"
               aria-hidden="true"
             />
             <Input
+              ref={inputRef}
               aria-label="Search English word"
               className="pl-9"
               placeholder="Search an English word..."

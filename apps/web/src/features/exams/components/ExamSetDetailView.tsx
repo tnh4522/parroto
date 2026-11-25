@@ -5,7 +5,7 @@ import { ArrowLeft, Clock, HelpCircle, Sparkles } from "lucide-react";
 import type { ExamTrack } from "@linguacraft/contracts";
 import { useExamSetDetailQuery } from "@/features/exams/api/exams-api";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -96,10 +96,11 @@ export function ExamSetDetailView({
                   </div>
                 </div>
 
-                <Link href={`/exams/${trackLower}/${encodeURIComponent(exam.slug)}`}>
-                  <Button variant="primary" size="sm" className="w-full">
-                    Configure &amp; Start
-                  </Button>
+                <Link
+                  href={`/exams/${trackLower}/${encodeURIComponent(exam.slug)}`}
+                  className={buttonVariants({ variant: "primary", size: "sm", className: "w-full" })}
+                >
+                  Configure &amp; Start
                 </Link>
               </CardContent>
             </Card>

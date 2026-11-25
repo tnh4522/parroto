@@ -149,7 +149,7 @@ describe("DictationWorkspace", () => {
 
     expect(screen.getByText(/available on linguacraft pro/i)).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /browse free lessons/i })
+      screen.getByRole("link", { name: /browse free lessons/i })
     ).toBeInTheDocument();
   });
 });

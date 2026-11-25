@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   ArrowLeft,
   Clock,
@@ -22,7 +22,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { DataPagination } from "@/shared/ui/DataPagination";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
@@ -55,10 +55,12 @@ export function ExamOverviewView({
   const commentsQuery = useExamCommentsQuery(examId, commentPage);
   const postCommentMutation = usePostExamCommentMutation(examId);
 
-  if (overviewQuery.data && !partsInitialized) {
-    setSelectedParts(overviewQuery.data.parts.map((p) => p.partNumber));
-    setPartsInitialized(true);
-  }
+  useEffect(() => {
+    if (overviewQuery.data && !partsInitialized) {
+      setSelectedParts(overviewQuery.data.parts.map((p) => p.partNumber));
+      setPartsInitialized(true);
+    }
+  }, [overviewQuery.data, partsInitialized]);
 
   if (overviewQuery.isLoading) {
     return <LoadingState label="Loading exam overview..." />;
@@ -185,10 +187,9 @@ export function ExamOverviewView({
           </span>
           <Link
             href={`/exams/${trackLower}/session/${encodeURIComponent(userInProgressSessionId)}`}
+            className={buttonVariants({ variant: "primary", size: "sm" })}
           >
-            <Button variant="primary" size="sm">
-              Resume Session
-            </Button>
+            Resume Session
           </Link>
         </div>
       ) : null}
@@ -357,7 +358,7 @@ export function ExamOverviewView({
                     <p className="text-xs font-bold text-slate-900 dark:text-white">
                       {item.label}
                     </p>
-                    <p className="mt-1 text-[11px] text-slate-500">{item.desc}</p>
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{item.desc}</p>
                   </button>
                 ))}
               </div>

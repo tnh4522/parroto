@@ -7,7 +7,7 @@ import { useExamResultQuery } from "@/features/exams/api/exams-api";
 import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -80,15 +80,17 @@ export function ExamResultView({
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <Link href="/analytics">
-                <Button variant="primary" size="sm">
-                  View Analytics
-                </Button>
+              <Link
+                href="/analytics"
+                className={buttonVariants({ variant: "primary", size: "sm" })}
+              >
+                View Analytics
               </Link>
-              <Link href={`/exams/${trackLower}`}>
-                <Button variant="outline" size="sm">
-                  More {track} Tests
-                </Button>
+              <Link
+                href={`/exams/${trackLower}`}
+                className={buttonVariants({ variant: "outline", size: "sm" })}
+              >
+                More {track} Tests
               </Link>
             </div>
           </div>

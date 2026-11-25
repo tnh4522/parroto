@@ -2,6 +2,14 @@ import { create } from "zustand";
 
 export type ThemeMode = "light" | "dark";
 
+const THEME_STORAGE_KEY = "linguacraft-theme";
+
+function applyThemeClass(theme: ThemeMode): void {
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }
+}
+
 export interface GlobalUiState {
   isSidebarCollapsed: boolean;
   isMobileDrawerOpen: boolean;
@@ -16,6 +24,7 @@ export interface GlobalUiState {
   closeLoginModal: () => void;
   openDictionaryModal: (initialWord?: string) => void;
   closeDictionaryModal: () => void;
+  hydrateTheme: () => void;
   toggleTheme: () => void;
 }
 
@@ -37,11 +46,32 @@ export const useGlobalUiStore = create<GlobalUiState>((set) => ({
     set({ isDictionaryModalOpen: true, dictionaryInitialWord: word }),
   closeDictionaryModal: () =>
     set({ isDictionaryModalOpen: false, dictionaryInitialWord: "" }),
+  hydrateTheme: () => {
+    if (typeof window === "undefined") return;
+    try {
+      const saved = window.localStorage.getItem(THEME_STORAGE_KEY);
+      const preferred: ThemeMode =
+        saved === "dark" || saved === "light"
+          ? saved
+          : window.matchMedia?.("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+      applyThemeClass(preferred);
+      set({ theme: preferred });
+    } catch {
+      // Ignore storage access errors in restricted browsers
+    }
+  },
   toggleTheme: () =>
     set((state) => {
       const next: ThemeMode = state.theme === "light" ? "dark" : "light";
-      if (typeof document !== "undefined") {
-        document.documentElement.classList.toggle("dark", next === "dark");
+      applyThemeClass(next);
+      if (typeof window !== "undefined") {
+        try {
+          window.localStorage.setItem(THEME_STORAGE_KEY, next);
+        } catch {
+          // Ignore storage write errors
+        }
       }
       return { theme: next };
     }),

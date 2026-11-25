@@ -6,7 +6,7 @@ import type { ExamTrack } from "@linguacraft/contracts";
 import { useExamSetsQuery } from "@/features/exams/api/exams-api";
 import { cn } from "@/shared/lib/cn";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent } from "@/shared/ui/Card";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
 
@@ -53,11 +53,12 @@ export function ExamTrackLandingView({ track }: { track: ExamTrack }) {
               TOEIC
             </Link>
           </div>
-          <Link href="/analytics">
-            <Button variant="outline" size="sm">
-              <BarChart2 className="h-4 w-4" aria-hidden="true" />
-              Analytics
-            </Button>
+          <Link
+            href="/analytics"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            <BarChart2 className="h-4 w-4" aria-hidden="true" />
+            Analytics
           </Link>
         </div>
       </div>
@@ -105,12 +106,13 @@ export function ExamTrackLandingView({ track }: { track: ExamTrack }) {
                   ) : null}
                 </div>
 
-                <Link href={`/exams/${trackLower}/sets/${encodeURIComponent(examSet.slug)}`}>
-                  <Button variant="primary" size="sm" className="w-full">
-                    <BookCheck className="h-4 w-4" aria-hidden="true" />
-                    Open Test Set
-                    <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                  </Button>
+                <Link
+                  href={`/exams/${trackLower}/sets/${encodeURIComponent(examSet.slug)}`}
+                  className={buttonVariants({ variant: "primary", size: "sm", className: "w-full" })}
+                >
+                  <BookCheck className="h-4 w-4" aria-hidden="true" />
+                  Open Test Set
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                 </Link>
               </CardContent>
             </Card>

@@ -11,7 +11,7 @@ const badgeStyles: Record<BadgeVariant, string> = {
   warning:
     "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/60 dark:text-amber-300 dark:border-amber-800",
   info: "bg-sky-50 text-sky-700 border-sky-200 dark:bg-sky-950/60 dark:text-sky-300 dark:border-sky-800",
-  pro: "bg-gradient-to-r from-amber-500 to-orange-500 text-white border-amber-400",
+  pro: "bg-amber-700 text-white border-amber-800 dark:bg-amber-600 dark:border-amber-500",
 };
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {

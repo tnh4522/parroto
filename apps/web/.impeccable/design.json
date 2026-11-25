@@ -1,0 +1,168 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-24T18:37:00+07:00",
+  "title": "Design System: LinguaCraft",
+  "extensions": {
+    "colorMeta": {
+      "cobalt-signal": {
+        "role": "primary",
+        "displayName": "Cobalt Signal",
+        "canonical": "rgb(37 99 235)",
+        "tonalRamp": ["#0f2966", "#163b91", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#eff6ff"]
+      },
+      "cobalt-glow": {
+        "role": "primary",
+        "displayName": "Cobalt Glow",
+        "canonical": "rgb(59 130 246)",
+        "tonalRamp": ["#0f2966", "#163b91", "#1d4ed8", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#eff6ff"]
+      },
+      "amber-crest": {
+        "role": "secondary",
+        "displayName": "Amber Crest",
+        "canonical": "rgb(217 119 6)",
+        "tonalRamp": ["#451a03", "#78350f", "#b45309", "#d97706", "#f59e0b", "#fbbf24", "#fde68a", "#fffbeb"]
+      },
+      "emerald-pass": {
+        "role": "tertiary",
+        "displayName": "Emerald Pass",
+        "canonical": "rgb(22 163 74)",
+        "tonalRamp": ["#052e16", "#14532d", "#15803d", "#16a34a", "#22c55e", "#4ade80", "#86efac", "#f0fdf4"]
+      },
+      "crimson-alert": {
+        "role": "tertiary",
+        "displayName": "Crimson Alert",
+        "canonical": "rgb(220 38 38)",
+        "tonalRamp": ["#450a0a", "#7f1d1d", "#b91c1c", "#dc2626", "#ef4444", "#f87171", "#fca5a5", "#fef2f2"]
+      },
+      "slate-paper": {
+        "role": "neutral",
+        "displayName": "Slate Paper",
+        "canonical": "rgb(248 250 252)",
+        "tonalRamp": ["#090d16", "#0f172a", "#1e293b", "#334155", "#64748b", "#94a3b8", "#e2e8f0", "#f8fafc"]
+      },
+      "pure-canvas": {
+        "role": "neutral",
+        "displayName": "Pure Canvas",
+        "canonical": "rgb(255 255 255)",
+        "tonalRamp": ["#0f172a", "#1e293b", "#475569", "#64748b", "#94a3b8", "#cbd5e1", "#f1f5f9", "#ffffff"]
+      },
+      "ink-obsidian": {
+        "role": "neutral",
+        "displayName": "Ink Obsidian",
+        "canonical": "rgb(15 23 42)",
+        "tonalRamp": ["#090d16", "#0f172a", "#1e293b", "#334155", "#475569", "#94a3b8", "#cbd5e1", "#f8fafc"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Landing hero and top-level headlines." },
+      "headline": { "displayName": "Headline", "purpose": "Workspace section titles." },
+      "title": { "displayName": "Title", "purpose": "Card and modal titles." },
+      "body": { "displayName": "Body", "purpose": "Study copy, transcripts, and form inputs." },
+      "label": { "displayName": "Label", "purpose": "Navigation labels, badges, and pagination metadata." }
+    },
+    "shadows": [
+      { "name": "card-resting", "value": "0 1px 2px 0 rgba(15, 23, 42, 0.05)", "purpose": "Subtle resting lift on bordered cards." },
+      { "name": "overlay-modal", "value": "0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1)", "purpose": "Mobile drawer and dialog overlays." }
+    ],
+    "motion": [
+      { "name": "transition-standard", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Button press, border hover, and sidebar collapse transitions (150-200ms)." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Tactile primary action button with 2px bottom lip and cobalt focus ring.",
+      "html": "<button class=\"ds-btn-primary\" type=\"button\">Enter Workspace</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 12px; background: #2563eb; color: #ffffff; border: none; border-bottom: 2px solid #1e40af; font-size: 14px; font-weight: 600; cursor: pointer; transition: background-color 150ms cubic-bezier(0.4,0,0.2,1), transform 100ms; } .ds-btn-primary:hover { background: #1d4ed8; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary framed button with 2px slate border shifting to cobalt on hover.",
+      "html": "<button class=\"ds-btn-outline\" type=\"button\">Sign In</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 0 16px; border-radius: 12px; background: transparent; color: rgb(var(--fg, 15 23 42)); border: 2px solid rgb(var(--border, 226 232 240)); font-size: 14px; font-weight: 600; cursor: pointer; transition: border-color 150ms, color 150ms; } .ds-btn-outline:hover { border-color: rgba(59, 130, 246, 0.6); color: #2563eb; } .ds-btn-outline:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }"
+    },
+    {
+      "name": "Card Container",
+      "kind": "card",
+      "refersTo": "card-surface",
+      "description": "Tactile 2px-bordered study surface container with 16px radius.",
+      "html": "<div class=\"ds-card\"><div class=\"ds-card-title\">Audio Dictation</div><p class=\"ds-card-body\">Sentence-by-sentence listening drills with speed control.</p></div>",
+      "css": ".ds-card { border-radius: 16px; border: 2px solid rgb(var(--border, 226 232 240)); background: rgb(var(--surface, 255 255 255)); color: rgb(var(--fg, 15 23 42)); padding: 20px; box-shadow: 0 1px 2px 0 rgba(15, 23, 42, 0.05); transition: border-color 150ms; } .ds-card:hover { border-color: rgba(59, 130, 246, 0.6); } .ds-card-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; } .ds-card-body { font-size: 14px; color: rgb(var(--fg-muted, 71 85 105)); margin: 0; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "40px rounded-xl input with 2px border and cobalt focus ring.",
+      "html": "<input class=\"ds-input\" type=\"text\" placeholder=\"Type what you hear...\" />",
+      "css": ".ds-input { width: 100%; height: 40px; border-radius: 12px; border: 2px solid rgb(var(--border, 226 232 240)); background: rgb(var(--surface, 255 255 255)); color: rgb(var(--fg, 15 23 42)); padding: 8px 14px; font-size: 14px; transition: border-color 150ms, box-shadow 150ms; } .ds-input:focus-visible { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25); }"
+    },
+    {
+      "name": "Semantic Badge",
+      "kind": "chip",
+      "description": "Full-pill status and tier badge.",
+      "html": "<span class=\"ds-badge-info\">CEFR B2</span>",
+      "css": ".ds-badge-info { display: inline-flex; align-items: center; gap: 4px; border-radius: 9999px; border: 1px solid #bae6fd; background: #f0f9ff; color: #0369a1; padding: 2px 10px; font-size: 12px; font-weight: 600; }"
+    },
+    {
+      "name": "Workspace Nav Item",
+      "kind": "nav",
+      "description": "Sidebar navigation link with active cobalt-tinted highlight.",
+      "html": "<a class=\"ds-nav-item ds-nav-active\" href=\"#\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"M3 18v-6a9 9 0 0 1 18 0v6\"/><path d=\"M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z\"/></svg><span>Dictation</span></a>",
+      "css": ".ds-nav-item { display: flex; align-items: center; gap: 12px; border-radius: 12px; padding: 10px 12px; font-size: 14px; font-weight: 600; color: rgb(var(--fg-muted, 71 85 105)); text-decoration: none; transition: background-color 150ms, color 150ms; } .ds-nav-item:hover { background: rgb(var(--surface-muted, 241 245 249)); color: rgb(var(--fg, 15 23 42)); } .ds-nav-active { background: #eff6ff; color: #1d4ed8; } .ds-nav-item:focus-visible { outline: 2px solid #3b82f6; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Focused Language Studio",
+    "overview": "LinguaCraft is built as a crisp, tactile academic study bench where learners spend extended sessions listening, typing dictation, shadowing phonetics, reviewing SM-2 flashcards, and taking timed IELTS/TOEIC simulations. Rather than heavy gradients or ornamental chrome, the interface relies on cool slate paper canvases, high-contrast ink typography, and deliberate 2px structural borders that separate active controls from surrounding study material.\n\nBoth the light workspace and the low-glare .dark theme are grounded in CSS custom properties in globals.css paired with Tailwind CSS v4 utility classes. Interactive affordances communicate state through crisp border shifts, subtle 1px bottom-lip compression on primary actions, and clear semantic feedback tones for accuracy, warnings, and PRO tier badges.",
+    "keyCharacteristics": [
+      "Cool slate paper backgrounds (--bg, --surface, --surface-muted) paired with high-contrast slate ink (--fg, --fg-muted).",
+      "Single focused Cobalt Signal accent for primary CTAs, active navigation pills, and keyboard focus rings.",
+      "Tactile 2px structural borders on cards, inputs, and outline controls (border-2), plus a 2px bottom lip on raised primary/danger buttons.",
+      "Complete light (:root) and dark (.dark) theme parity across marketing and workspace shells."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Cobalt Signal drives primary actions, active route indicators, and focus rings; reserve Amber Crest strictly for PRO entitlements and warnings, and Emerald/Crimson strictly for pass/fail study feedback.",
+        "section": "colors"
+      },
+      {
+        "name": "The Semantic Token Parity Rule",
+        "body": "Every light-mode slate surface and border must define an explicit .dark counterpart so theme switching preserves >=4.5:1 body text contrast.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight-Over-Decoration Rule",
+        "body": "Separate headings from study copy through font weight (700–800 vs 400) and tight tracking rather than decorative fonts or gradient text.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Surfaces stay flat at rest using 2px structural borders and tonal step contrast; reserve heavy shadow-xl elevation strictly for drawers and modals.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do reuse Button, Card, Badge, Input, LoadingState, ErrorState, EmptyState, and DataPagination from src/shared/ui before creating local markup.",
+      "Do preserve <= 40px minimum control height (40px md / icon buttons, 44px+ mobile touch clearance) and visible focus-visible rings on every interactive element.",
+      "Do keep light (:root) and .dark contrast balanced whenever adding custom status surfaces or borders.",
+      "Do use EmptyState and ErrorState honestly when the backend API is unavailable or returns empty study sets."
+    ],
+    "donts": [
+      "Don't invent webfont stacks or decorative serif headings that diverge from the zero-FOUT system sans stack.",
+      "Don't place heavy drop shadows (shadow-lg/shadow-xl) on static workspace cards—keep cards flat with 2px borders and shadow-sm.",
+      "Don't apply Amber PRO gradients to ordinary navigation or non-PRO controls.",
+      "Don't fabricate acoustic phoneme/prosody bars or official exam scores in UI copy when backend measurementTier is transcript-only."
+    ]
+  }
+}

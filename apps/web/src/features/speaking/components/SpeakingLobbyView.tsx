@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import {
   Lock,
-  Mic,
-  MicOff,
   PhoneOff,
   Plus,
   RefreshCw,
@@ -27,7 +25,7 @@ import { cn } from "@/shared/lib/cn";
 import { useAuthStore } from "@/shared/stores/auth-store";
 import { useGlobalUiStore } from "@/shared/stores/ui-store";
 import { Badge } from "@/shared/ui/Badge";
-import { Button } from "@/shared/ui/Button";
+import { Button, buttonVariants } from "@/shared/ui/Button";
 import { Card, CardContent, CardHeader } from "@/shared/ui/Card";
 import { Input } from "@/shared/ui/Input";
 import { EmptyState, ErrorState, LoadingState } from "@/shared/ui/StateBoundary";
@@ -57,7 +55,6 @@ export function SpeakingLobbyView() {
   const [createError, setCreateError] = useState<string | null>(null);
 
   const [joinedRoom, setJoinedRoom] = useState<SpeakingRoom | null>(null);
-  const [isMuted, setIsMuted] = useState(false);
 
   const roomsQuery = useSpeakingRoomsQuery({
     cefrLevel: cefrFilter,
@@ -89,7 +86,6 @@ export function SpeakingLobbyView() {
       return;
     }
     setJoinedRoom(room);
-    setIsMuted(false);
   };
 
   const handleCreateSubmit = async (event: FormEvent) => {
@@ -170,10 +166,11 @@ export function SpeakingLobbyView() {
               rooms.
             </span>
           </div>
-          <Link href="/settings">
-            <Button variant="outline" size="sm">
-              Complete Age Verification
-            </Button>
+          <Link
+            href="/settings"
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            Complete Age Verification
           </Link>
         </div>
       ) : null}
@@ -183,11 +180,11 @@ export function SpeakingLobbyView() {
         <Card className="border-emerald-300 bg-emerald-50/40 dark:border-emerald-900/50 dark:bg-emerald-950/20">
           <CardContent className="flex flex-wrap items-center justify-between gap-4 p-4">
             <div className="space-y-1">
-              <div className="flex items-center gap-2">
-                <Badge variant="success">Live Room</Badge>
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge variant="success">Lobby Check-In</Badge>
                 <Badge variant="info">{joinedRoom.cefrLevel}</Badge>
-                <span className="text-xs text-slate-500">
-                  Channel: /ws/community (WebRTC signaling ready)
+                <span className="text-xs text-slate-600 dark:text-slate-400">
+                  Room joined · Live peer audio mesh coming soon
                 </span>
               </div>
               <h2 className="text-base font-bold text-slate-900 dark:text-white">
@@ -199,24 +196,6 @@ export function SpeakingLobbyView() {
             </div>
 
             <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant={isMuted ? "outline" : "primary"}
-                size="sm"
-                onClick={() => setIsMuted((m) => !m)}
-              >
-                {isMuted ? (
-                  <>
-                    <MicOff className="h-4 w-4" aria-hidden="true" />
-                    Unmute Mic
-                  </>
-                ) : (
-                  <>
-                    <Mic className="h-4 w-4" aria-hidden="true" />
-                    Mute Mic
-                  </>
-                )}
-              </Button>
               <Button
                 type="button"
                 variant="danger"

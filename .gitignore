@@ -41,3 +41,15 @@ Thumbs.db
 desktop.ini
 *.swp
 *.swo
+
+# Impeccable local/runtime state (keep config.json, design.json, surfaces/, live/config.json, critique/ignore.md)
+**/.impeccable/config.local.json
+**/.impeccable/hook.cache.json
+**/.impeccable/questions/
+**/.impeccable/mocks/
+**/.impeccable/review/
+**/.impeccable/live/sessions/
+**/.impeccable/live/roots.json
+**/.impeccable/live/inject-journal.json
+**/.impeccable/critique/*
+!**/.impeccable/critique/ignore.md
